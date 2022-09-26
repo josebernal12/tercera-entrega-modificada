@@ -8,14 +8,14 @@ const {
     eliminarCarrito,
     comprarCarrito
 } = require('../controllers/carritoControllers');
-const { existeCarritoPorId, existeEmail } = require('../helpers/db-validator');
+const { existeCarritoPorId, existeEmail, existeProductoPorId } = require('../helpers/db-validator');
 const { isAuthenticated, esAdminRole } = require('../middlewares/authenticated');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 // le quite el isAuthenticated para poder probarlo con postman
 
-router.get('/',  isAuthenticated, mostrarCarritos)
+router.get('/', mostrarCarritos)
 
 router.get('/:id', [
     // isAuthenticated,
@@ -30,6 +30,7 @@ router.post('/', [
     // isAuthenticated,
     check('email', 'el email es requerido').not().isEmpty(),
     check('email').custom(existeEmail),
+    // check('email').custom(existeProductoPorId),
     validarCampos
 ], crearCarrito)
 

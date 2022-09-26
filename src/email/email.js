@@ -12,8 +12,8 @@ const client = twilio(accountSide, authtoken)
 const TEST_MAIL = Config.USER
 
 const transporter = createTransport({
-  host: 'smtp.ethereal.email',
-  port: 587,
+  host: Config.HOST,
+  port: Config.EMAILPORT,
   auth: {
     user: TEST_MAIL,
     pass: Config.PASS

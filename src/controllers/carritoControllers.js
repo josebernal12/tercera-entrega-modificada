@@ -3,27 +3,36 @@ const Carrito = require('../models/modelCarrito')
 const logger = require('../utils/logger')
 const { transporter } = require('../email/email')
 const { Config } = require('../config/config')
+const carritoServices = require('../services/carritoServices')
 
 
 const crearCarrito = async (req, res) => {
 
     try {
-        const { email, pedido } = req.body
-        const emailBD = await Carrito.findOne({ email })
 
-        if (emailBD) {
-            return res.json({ msg: 'ya hay un carrito con ese email' })
-        }
-        const carrito = new Carrito({ email, pedido })
 
-        const carritodb = await carrito.save()
-
+        const cartCreated = await carritoServices.crearCarrito(req.body)
         res.json({
-            carritodb
+            cartCreated
         })
+
+
+        // const { email, pedido } = req.body
+        // const emailBD = await Carrito.findOne({ email })
+
+        // if (emailBD) {
+        //     return res.json({ msg: 'ya hay un carrito con ese email' })
+        // }
+        // const carrito = new Carrito({ email, pedido })
+
+        // const carritodb = await carrito.save()
+
+        // res.json({
+        //     carritodb
+        // })
     } catch (error) {
         logger.error('hablar con el administrador - ruta - Crear Carrito')
-        console.log(error)
+        res.json(error)
     }
 }
 
@@ -31,16 +40,23 @@ const crearCarrito = async (req, res) => {
 const mostrarCarritos = async (req, res) => {
 
     try {
-        const carrito = await Carrito.find()
-            .populate({
-                path: 'pedido.producto',
-                model: 'Producto',
 
-            }
-            )
+        const cart = await carritoServices.mostrarCarrito()
+        res.json({
+            cart
+        })
 
 
-        res.render('carrito', { carrito: carrito })
+        // const carrito = await Carrito.find()
+        //     .populate({
+        //         path: 'pedido.producto',
+        //         model: 'Producto',
+
+        //     }
+        //     )
+
+
+        // res.render('carrito', { carrito: carrito })
 
     } catch (error) {
         logger.error('hablar con el administrador - ruta - Mostrar Carrito')
@@ -55,16 +71,21 @@ const obtenerCarrito = async (req, res) => {
     try {
         const { id } = req.params
 
-        const carrito = await Carrito.findById(id)
-            .populate({
-                path: 'pedido.producto',
-                model: 'Producto',
-
-            })
-
+        const cart = await carritoServices.obtenerCarritoPorId(id)
         res.json({
-            carrito
+            cart
         })
+
+        // const carrito = await Carrito.findById(id)
+        //     .populate({
+        //         path: 'pedido.producto',
+        //         model: 'Producto',
+
+        //     })
+
+        // res.json({
+        //     carrito
+        // })
     } catch (error) {
         logger.error('hablar con el administrador - ruta - Obtener Carrito')
 
@@ -79,16 +100,19 @@ const actualizarCarrito = async (req, res) => {
     try {
         const { id } = req.params
 
-        const carrito = await Carrito.findByIdAndUpdate(id, req.body, { new: true })
-            .populate({
-                path: 'pedido.producto',
-                model: 'Producto',
+        const updatedCart = await carritoServices.actualizarCarrito(id, req.body)
+        res.json({ updatedCart })
 
-            })
+        // const carrito = await Carrito.findByIdAndUpdate(id, req.body, { new: true })
+        //     .populate({
+        //         path: 'pedido.producto',
+        //         model: 'Producto',
 
-        res.json({
-            carrito
-        })
+        //     })
+
+        // res.json({
+        //     carrito
+        // })
     } catch (error) {
         logger.error('hablar con el administrador - ruta - Actualizar Carrito')
 
@@ -102,12 +126,15 @@ const eliminarCarrito = async (req, res) => {
     try {
         const { id } = req.params
 
-        const carritoEliminado = await Carrito.findByIdAndDelete(id, { new: true })
+        const deletedCart = await carritoServices.eliminarCarrito(id)
+        res.json({ deletedCart })
+
+        // const carritoEliminado = await Carrito.findByIdAndDelete(id, { new: true })
 
 
-        res.json({
-            carritoEliminado
-        })
+        // res.json({
+        //     carritoEliminado
+        // })
     } catch (error) {
         logger.error('hablar con el administrador - ruta - Eliminar Carrito')
 

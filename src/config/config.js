@@ -9,7 +9,9 @@ const Config = {
     SECRET: process.env.SECRET,
     SECRETORPRIVATEKEY: process.env.SECRETORPRIVATEKEY,
     ACCOUNTSIDE: process.env.ACCOUNTSIDE,
-    AUTHTOKEN: process.env.AUTHTOKEN
+    AUTHTOKEN: process.env.AUTHTOKEN,
+    HOST: process.env.HOST,
+    EMAILPORT: process.env.EMAILPORT
 
 }
 
