@@ -1,39 +1,40 @@
-const Carrito = require('../models/modelCarrito')
+const Carrito = require("../models/modelCarrito");
 
-
-exports.mostrarCarrito = async () => {
-
-    const carrito = await Carrito.find()
-        .populate('producto', ' nombre')
-
-    return carrito
+class CarritoDao {
+  constructor() {
+    this.carrito = Carrito;
+  }
+  async getAllCart() {
+    const response = await this.carrito.find().populate({
+      path: "pedido.producto",
+      model: "Producto",
+    });
+    return response;
+  }
+  async getById(id) {
+    const response = await this.carrito.findById(id);
+    return response;
+  }
+  async createdCart(cart) {
+    const emailExiste = await Carrito.findOne({ email: cart.email });
+    if (emailExiste) throw `el email ${emailExiste.email} ya tiene un carrito!`;
+    const response = await this.carrito.create(cart);
+    return response;
+  }
+  async updatedCart(id, cart) {
+    const response = await this.carrito.findByIdAndUpdate(id, cart).populate({
+      path: "pedido.producto",
+      model: "Producto",
+    });
+    return response;
+  }
+  async deletedCart(id) {
+    const response = await this.carrito.findByIdAndDelete(id).populate({
+      path: "pedido.producto",
+      model: "Producto",
+    });
+    return response;
+  }
 }
-exports.obtenerCarritoPorId = async (id) => {
+module.exports = CarritoDao;
 
-    const carrito = await Carrito.findById(id)
-        .populate('producto', ' nombre')
-
-    return carrito
-}
-exports.crearCarrito = async (cartCreated) => {
-    const emailExiste = await Carrito.findOne({ email: cartCreated.email })
-    if (emailExiste) throw `el email ${emailExiste.email} ya tiene un carrito!`
-
-    const carrito = new Carrito(cartCreated)
-
-    return carrito
-}
-exports.actualizarCarrito = async (id, cart) => {
-
-    const carrito = await Carrito.findById(id, cart, { new: true })
-        .populate('producto', ' nombre')
-
-    return carrito
-}
-exports.eliminarCarrito = async (id) => {
-
-    const carrito = await Carrito.findByIdAndDelete(id, { new: true })
-        .populate('producto', ' nombre')
-
-    return carrito
-}

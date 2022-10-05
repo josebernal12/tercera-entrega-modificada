@@ -1,33 +1,31 @@
-const productDao = require('../daos/productDao')
+// const productDao = require("../daos/productDao");
+const productDto = require("../daos/Dto/producto.dto");
+const ProductoDao = require("../daos/productDao");
+
+const productoDao = new ProductoDao();
 
 exports.mostrarProductos = async () => {
+  const producto = await productoDao.getAllProduct();
 
-    const producto = await productDao.mostrarProductos()
-
-    return producto
-}
+  return new productDto(producto);
+};
 exports.obtenerProductoPorId = async (id) => {
+  const producto = await productoDao.getAById(id);
 
-    const producto = await productDao.obtenerProductoPorId(id)
+  return producto;
+};
+exports.CrearProducto = async (createdProduct) => {
+  const producto = await productoDao.createProduct(createdProduct);
 
-    return producto
-}
-exports.CrearProducto = async (nombre, precio, stock) => {
-   
-    const producto = await productDao.CrearProducto(nombre, precio, stock)
+  return producto;
+};
+exports.actualizarProducto = async (id,product) => {
+  const producto = await productoDao.updatedProduct(id,product);
 
-    return producto
-}
-exports.actualizarProducto = async (product, id) => {
-
-    const producto = await productDao.actualizarProductos(id, product)
-
-    return producto
-}
+  return producto;
+};
 exports.eliminarProducto = async (id) => {
+  const producto = await productoDao.deletedProduct(id);
 
-    const producto = await productDao.eliminarProducto(id)
-
-    return producto
-}
-
+  return producto;
+};

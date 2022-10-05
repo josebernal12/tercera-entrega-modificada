@@ -25,7 +25,8 @@ const ProductosSchema = Schema({
     },
   
 
-} ,{ timestamps: true })
+})
+// { timestamps: true })
 
    
 

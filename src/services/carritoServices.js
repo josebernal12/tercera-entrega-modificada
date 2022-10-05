@@ -1,40 +1,25 @@
-const carritoDaos = require('../daos/carritoDaos')
+const CarritoDao = require("../daos/carritoDaos");
+const carritoDao = new CarritoDao();
+const CarritoDto = require("../daos/Dto/carrito.dto");
 
 exports.mostrarCarrito = async () => {
+  const response = await carritoDao.getAllCart();
 
-    const carrito = await carritoDaos.mostrarCarrito()
-
-    return carrito
-
-}
+  return new CarritoDto(response);
+};
 exports.obtenerCarritoPorId = async (id) => {
-
-    const carrito = await carritoDaos.obtenerCarritoPorId(id)
-
-    return carrito
-
-}
+  const response = await carritoDao.getById(id);
+  return response;
+};
 exports.crearCarrito = async (email, pedido) => {
-
-    const carrito = await carritoDaos.crearCarrito(email, pedido)
-
-    await carrito.save()
-
-    return carrito
-
-}
+  const response = await carritoDao.createdCart(email, pedido);
+  return response;
+};
 exports.actualizarCarrito = async (id, cart) => {
-
-    const carrito = await carritoDaos.actualizarCarrito(id, cart)
-
-    return carrito
-
-}
+  const response = await carritoDao.updatedCart(id, cart);
+  return response;
+};
 exports.eliminarCarrito = async (id) => {
-
-    const carrito = await carritoDaos.eliminarCarrito(id)
-
-    return carrito
-
-}
-
+  const response = await carritoDao.deletedCart(id);
+  return response;
+};

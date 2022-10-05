@@ -8,7 +8,7 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const router = require('express').Router();
 
 // le quite el isAuthenticated para poder probarlo con postman
-router.get('/', isAuthenticated, mostrarProductos)
+router.get('/',  mostrarProductos)
 
 router.get('/:id', [
     // isAuthenticated,
